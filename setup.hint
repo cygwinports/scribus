@@ -1,6 +1,6 @@
 category: KDE Publishing
-requires: cygwin ghostscript-x11 lcms libX11_6 libart_lgpl2 libfreetype26 libjpeg62 libtiff5 libxml2 qt3
-sdesc: "Professional desktop publishing program for Qt"
+requires: cygwin ghostscript-x11 lcms libcairo2 libfontconfig1 libfreetype26 libjpeg62 libtiff5 libxml2 qt3 zlib
+sdesc: "Professional desktop publishing program"
 ldesc: "Scribus brings award-winning professional DTP to Linux and *nix
 desktops with a combination of 'press-ready' output and new approaches
 to page layout.
