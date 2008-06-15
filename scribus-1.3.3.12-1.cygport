@@ -1,0 +1,17 @@
+inherit kde3
+
+DESCRIPTION="Professional desktop publishing program for Qt"
+HOMEPAGE="http://www.scribus.net/"
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2
+		 mirror://sourceforge/${PN}/${P}.tar.bz2.sig"
+
+DIFF_EXCLUDES="Makefile config.h"
+
+# libscriptplugin contains undefined references to python modules
+CYGCONF_ARGS="
+	--enable-cairo
+	--disable-gcc-symbol-visibility
+	--with-pythondir=/usr
+"
+MAKEOPTS+=" kde_widgetdir=/usr/lib/kde3/plugins"
+USE_DESTDIR=0
