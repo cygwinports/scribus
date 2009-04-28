@@ -1,0 +1,11 @@
+vnd.scribus.desktop does not provide a Category field.
+
+--- origsrc/scribus-1.3.3.13/Makefile.am	2008-03-03 07:44:25.000000000 -0600
++++ src/scribus-1.3.3.13/Makefile.am	2009-04-28 14:30:42.123375000 -0500
+@@ -96,5 +96,5 @@ install-data-local:
+ 	$(INSTALL_DATA) $(top_srcdir)/README $(prefix)/share/doc/scribus-$(VERSION)/README
+ 	$(INSTALL_DATA) $(top_srcdir)/TODO $(prefix)/share/doc/scribus-$(VERSION)/TODO
+ 	$(INSTALL_DATA) $(top_srcdir)/scribus.xml $(prefix)/share/mime/packages/scribus.xml
+-	$(INSTALL_DATA) $(top_srcdir)/vnd.scribus.desktop $(prefix)/share/applications/vnd.scribus.desktop
++	$(INSTALL_DATA) $(top_srcdir)/scribus.desktop $(prefix)/share/applications/scribus.desktop
+ 

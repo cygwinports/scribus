@@ -1,135 +1,3 @@
---- origsrc/scribus-1.3.3.12/admin/acinclude.m4.in	2006-10-29 06:05:59.000000000 -0600
-+++ src/scribus-1.3.3.12/admin/acinclude.m4.in	2008-06-15 03:02:59.218750000 -0500
-@@ -4120,10 +4120,14 @@
- if test ! -r $python_libdir/libpython$version.so; then
-   AC_FIND_FILE(libpython$version.a, $python_libdirs, python_libdir)
-   if test ! -r $python_libdir/libpython$version.a; then
--    AC_FIND_FILE(python$version/config/libpython$version.a, $python_libdirs, python_libdir)
-+   AC_FIND_FILE(python$version/config/libpython$version.dll.a, $python_libdirs, python_libdir)
-     python_libdir=$python_libdir/python$version/config
--    if test ! -r $python_libdir/libpython$version.a; then
--      python_libdir=no
-+   if test ! -r $python_libdir/libpython$version.dll.a; then
-+     AC_FIND_FILE(python$version/config/libpython$version.a, $python_libdirs, python_libdir)
-+     python_libdir=$python_libdir/python$version/config
-+     if test ! -r $python_libdir/libpython$version.a; then
-+       python_libdir=no
-+     fi
-     fi
-   fi
- fi
---- origsrc/scribus-1.3.3.12/configure.in.in	2008-06-09 14:56:53.000000000 -0500
-+++ src/scribus-1.3.3.12/configure.in.in	2008-06-15 00:04:53.421875000 -0500
-@@ -587,18 +587,29 @@
- fi
- AC_SUBST(COREFOUNDATION_LIBS)
- 
--dnl Some platforms require special libtool flags to build dynamically loadable
--dnl modules or plugins correctly. While libtool should take care of this with
--dnl a fixed set of arguments, in case we need to change it later this is being
--dnl made a configure-time substitution.
--MODULE_LINK_FLAGS=" -module "
--AC_SUBST(MODULE_LINK_FLAGS)
-+AC_MSG_CHECKING([for some Win32 platform])
-+case "$host" in
-+	*-*-cygwin*|*-*-mingw*) platform_win32=yes ;;
-+	*) platform_win32=no ;;
-+esac
-+AC_MSG_RESULT([$platform_win32])
-+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
- 
- all_libraries="$all_libraries $USER_LDFLAGS"
- all_includes="$all_includes $USER_INCLUDES"
- AC_SUBST(all_includes)
- AC_SUBST(all_libraries)
- 
-+dnl Some platforms require special libtool flags to build dynamically loadable
-+dnl modules or plugins correctly. While libtool should take care of this with
-+dnl a fixed set of arguments, in case we need to change it later this is being
-+dnl made a configure-time substitution.
-+MODULE_LINK_FLAGS="-module -avoid-version \$(all_libraries) \$(LIB_QT)"
-+if test "$platform_win32" = "yes" ; then
-+	MODULE_LINK_FLAGS="$MODULE_LINK_FLAGS -no-undefined -Wl,\$(top_builddir)/scribus/libscribus.a"
-+fi
-+AC_SUBST(MODULE_LINK_FLAGS)
-+
- AH_TOP([
- /*
-  * Prevent code from including config.h directly. You should include
---- origsrc/scribus-1.3.3.12/scribus/Makefile.am	2008-02-26 13:48:49.000000000 -0600
-+++ src/scribus-1.3.3.12/scribus/Makefile.am	2008-06-15 00:04:53.437500000 -0500
-@@ -436,6 +436,9 @@
- 	$(INSTALL_DATA) $(srcdir)/vgradient.h                   $(prefix)/include/scribus/vgradient.h
- 	$(INSTALL_DATA) $(srcdir)/vruler.h                      $(prefix)/include/scribus/vruler.h
- 	$(INSTALL_DATA) $(srcdir)/werktoolb.h                   $(prefix)/include/scribus/werktoolb.h
-+if PLATFORM_WIN32
-+	$(INSTALL_DATA) libscribus.a $(libdir)
-+endif
- 
- uninstall-local:
- 	-rm -f $(prefix)/include/scribus/about.h
-@@ -627,10 +630,14 @@
- 	-rm -f $(prefix)/include/scribus/vgradient.h
- 	-rm -f $(prefix)/include/scribus/vruler.h
- 	-rm -f $(prefix)/include/scribus/werktoolb.h
-+if PLATFORM_WIN32
-+	$(INSTALL_DATA) $(libdir)/libscribus.a
-+endif
- 
--scribus_LDADD  = $(LIBCAIRO_LIBS) $(LIBJPEG) $(LIBART_LIBS) $(LIBFREETYPE_LIBS) $(LIBFONTCONFIG_LIBS) $(LIBCUPS) $(LIBLCMS) $(LIBDL) $(LIBDL2) $(LIBTIFF) -lm $(LIB_QT) $(LIB_X11) $(LIBSOCKET) $(renderer_libs) text/libtext.la $(COREFOUNDATION_LIBS)
-+scribus_LDADD  = text/libtext.la $(LIBCAIRO_LIBS) $(LIBJPEG) $(LIBART_LIBS) $(LIBFREETYPE_LIBS) $(LIBFONTCONFIG_LIBS) $(LIBCUPS) $(LIBLCMS) $(LIBDL) $(LIBDL2) $(LIBTIFF) -lm $(LIB_QT) $(LIB_X11) $(LIBSOCKET) $(renderer_libs) $(COREFOUNDATION_LIBS)
-+
-+AM_LDFLAGS = -export-dynamic
- 
--AM_LDFLAGS = -export-dynamic $(LIBFREETYPE_LIBS)
- # set the include path for X, qt and KDE
- INCLUDES= $(LIBCAIRO_CFLAGS) $(LIBART_CFLAGS) $(LIBFREETYPE_CFLAGS) $(LIBFONTCONFIG_CFLAGS) $(all_includes)
- 
-@@ -639,6 +646,10 @@
- # the library search path.
- scribus_LDFLAGS = $(all_libraries)
- 
-+if PLATFORM_WIN32
-+scribus_LDFLAGS += -Wl,--export-all-symbols,--out-implib,libscribus.a
-+endif
-+
- # them while "make clean", use CLEANFILES
- DISTCLEANFILES = $(scribus_METASOURCES)
- # this is to enable Qt behavoir of am_edit
---- origsrc/scribus-1.3.3.12/scribus/pluginapi.h	2006-01-22 16:42:17.000000000 -0600
-+++ src/scribus-1.3.3.12/scribus/pluginapi.h	2008-06-15 00:04:53.500000000 -0500
-@@ -14,7 +14,7 @@
- #ifndef PLUGIN_API_H
- #define PLUGIN_API_H
- 
--#ifdef _WIN32
-+#if defined(_WIN32) || defined(__CYGWIN__)
-     #ifdef COMPILE_SCRIBUS_MAIN_APP
-         #define PLUGIN_API __declspec(dllimport)
-     #else
---- origsrc/scribus-1.3.3.12/scribus/pluginmanager.cpp	2007-09-05 16:19:27.000000000 -0500
-+++ src/scribus-1.3.3.12/scribus/pluginmanager.cpp	2008-06-15 00:04:53.531250000 -0500
-@@ -124,7 +124,11 @@
- 	//    (lib)?pluginname(\.pluginext)?
- 	QFileInfo fi(fileName);
- 	QString baseName(fi.baseName());
-+#ifdef __CYGWIN__
-+	if (baseName.startsWith("cyg"))
-+#else
- 	if (baseName.startsWith("lib"))
-+#endif
- 		baseName = baseName.remove(0,3);
- 	if (baseName.endsWith(platformDllExtension()))
- 		baseName = baseName.left(baseName.length() - 1 - platformDllExtension().length());
-@@ -380,7 +384,7 @@
- 
- 	//return "dylib";
- 	return "so";
--#elif defined(_WIN32) || defined(_WIN64)
-+#elif defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
- 	return "dll";
- #else
- 	// Generic *NIX
 --- origsrc/scribus-1.3.3.12/scribus/plugins/barcodegenerator/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/barcodegenerator/Makefile.am	2008-06-15 00:04:53.562500000 -0500
 @@ -15,7 +15,7 @@
@@ -187,14 +55,15 @@
      -DSAMPLESDIR=\"$(datadir)/scribus/samples/\" \
 --- origsrc/scribus-1.3.3.12/scribus/plugins/gettext/csvim/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/gettext/csvim/Makefile.am	2008-06-15 00:04:53.718750000 -0500
-@@ -16,6 +16,7 @@
+@@ -16,7 +16,7 @@
  AM_LDFLAGS = $(LIBFREETYPE_LIBS) $(MODULE_LINK_FLAGS) 
  
  AM_CPPFLAGS = \
+-    -I$(top_builddir)/scribus \
 +    -I$(top_srcdir)/scribus \
-     -I$(top_builddir)/scribus \
      -DDOCDIR=\"$(datadir)/doc/scribus-$(VERSION)/\" \
      -DICONDIR=\"$(datadir)/scribus/icons/\" \
+     -DSAMPLESDIR=\"$(datadir)/scribus/samples/\" \
 --- origsrc/scribus-1.3.3.12/scribus/plugins/gettext/docim/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/gettext/docim/Makefile.am	2008-06-15 00:04:53.921875000 -0500
 @@ -16,7 +16,7 @@
@@ -307,15 +176,13 @@
      -DSAMPLESDIR=\"$(datadir)/scribus/samples/\" \
 --- origsrc/scribus-1.3.3.12/scribus/plugins/psimport/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/psimport/Makefile.am	2008-06-15 00:04:54.359375000 -0500
-@@ -23,7 +23,7 @@
- AM_LDFLAGS = $(LIBFREETYPE_LIBS) $(MODULE_LINK_FLAGS) 
+@@ -24,6 +24,7 @@
  
  AM_CPPFLAGS = \
--    -I$(top_builddir)/scribus \
+     -I$(top_builddir)/scribus \
 +    -I$(top_srcdir)/scribus \
      -DDOCDIR=\"$(datadir)/doc/scribus-$(VERSION)/\" \
      -DICONDIR=\"$(datadir)/scribus/icons/\" \
-     -DSAMPLESDIR=\"$(datadir)/scribus/samples/\" \
 --- origsrc/scribus-1.3.3.12/scribus/plugins/saveastemplateplugin/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/saveastemplateplugin/Makefile.am	2008-06-15 00:04:54.375000000 -0500
 @@ -16,7 +16,7 @@
@@ -329,15 +196,6 @@
      -DSAMPLESDIR=\"$(datadir)/scribus/samples/\" \
 --- origsrc/scribus-1.3.3.12/scribus/plugins/scriptplugin/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/scriptplugin/Makefile.am	2008-06-15 03:18:02.906250000 -0500
-@@ -6,7 +6,7 @@
- pluginsdir = $(libdir)/scribus/plugins
- plugins_LTLIBRARIES = libscriptplugin.la
- INCLUDES = $(LIBFREETYPE_CFLAGS) $(all_includes)
--libscriptplugin_la_LDFLAGS = -version-info 0:0:0 $(scripter2lib)
-+libscriptplugin_la_LDFLAGS = -version-info 0:0:0 $(scripter2lib) $(LIBLCMS)
- libscriptplugin_la_METASOURCES = AUTO
- 
- libscriptplugin_la_SOURCES = \
 @@ -65,7 +65,7 @@
  AM_LDFLAGS = $(PYTHONLIB) $(LIBPYTHON) $(MODULE_LINK_FLAGS) $(BOOST_PYTHON_LDFLAGS)
  
@@ -360,29 +218,6 @@
      -DDOCDIR=\"$(datadir)/doc/scribus-$(VERSION)/\" \
      -DICONDIR=\"$(datadir)/scribus/icons/\" \
      -DSAMPLESDIR=\"$(datadir)/scribus/samples/\" \
---- origsrc/scribus-1.3.3.12/scribus/plugins/scriptplugin/scripts/Makefile.am	2008-03-10 14:33:11.000000000 -0500
-+++ src/scribus-1.3.3.12/scribus/plugins/scriptplugin/scripts/Makefile.am	2008-06-15 03:50:22.265625000 -0500
-@@ -9,10 +9,8 @@
- 	$(INSTALL_DATA) $(srcdir)/BleedAndPrintMarks.py $(prefix)/share/scribus/scripts/BleedAndPrintMarks.py
- 	$(INSTALL_DATA) $(srcdir)/CalendarWizard.py $(prefix)/share/scribus/scripts/CalendarWizard.py
- 	$(INSTALL_DATA) $(srcdir)/DirectImageImport.py $(prefix)/share/scribus/scripts/DirectImageImport.py
--	$(INSTALL_DATA) $(srcdir)/DrawGrid.py $(prefix)/share/scribus/scripts/DrawGrid.py
- 	$(INSTALL_DATA) $(srcdir)/ExtractText.py $(prefix)/share/scribus/scripts/ExtractText.py
- 	$(INSTALL_DATA) $(srcdir)/FontSample.py $(prefix)/share/scribus/scripts/FontSample.py
--	$(INSTALL_DATA) $(srcdir)/ImageWizard.py $(prefix)/share/scribus/scripts/ImageWizard.py
- 	$(INSTALL_DATA) $(srcdir)/InfoBox.py $(prefix)/share/scribus/scripts/InfoBox.py
- 	$(INSTALL_DATA) $(srcdir)/UnflipContent.py $(prefix)/share/scribus/scripts/UnflipContent.py
- 	
-@@ -26,9 +24,7 @@
- 	-rm -f $(prefix)/share/scribus/scripts/BleedAndPrintMarks.py
- 	-rm -f $(prefix)/share/scribus/scripts/CalendarWizard.py
- 	-rm -f $(prefix)/share/scribus/scripts/DirectImageImport.py
--	-rm -f $(prefix)/share/scribus/scripts/DrawGrid.py
- 	-rm -f $(prefix)/share/scribus/scripts/ExtractText.py
- 	-rm -f $(prefix)/share/scribus/scripts/FontSample.py
--	-rm -f $(prefix)/share/scribus/scripts/ImageWizard.py
- 	-rm -f $(prefix)/share/scribus/scripts/InfoBox.py
- 	-rm -f $(prefix)/share/scribus/scripts/UnflipContent.py
 --- origsrc/scribus-1.3.3.12/scribus/plugins/short-words/Makefile.am	2006-12-09 16:31:24.000000000 -0600
 +++ src/scribus-1.3.3.12/scribus/plugins/short-words/Makefile.am	2008-06-15 00:04:54.484375000 -0500
 @@ -15,7 +15,7 @@
