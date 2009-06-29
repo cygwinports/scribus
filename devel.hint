@@ -1,5 +1,5 @@
 category: KDE Publishing
-requires: cygwin scribus libfreetype-devel libqt3-devel zlib-devel
+requires: scribus libfreetype-devel libqt3-devel zlib-devel
 external-source: scribus
 sdesc: "Professional desktop publishing program (plugin development)"
 ldesc: "Scribus brings award-winning professional DTP to Linux and *nix
