@@ -1,0 +1,20 @@
+--- origsrc/scribus-1.3.6/scribus/util.cpp	2009-01-26 12:03:37.000000000 -0600
++++ src/scribus-1.3.6/scribus/util.cpp	2010-05-26 11:15:01.647740400 -0500
+@@ -35,7 +35,7 @@ for which a new license (GPL+exception)
+ 
+ #include <signal.h>
+ 
+-#if !defined(_WIN32) && !defined(Q_OS_MAC) 
++#if !defined(_WIN32) && !defined(Q_OS_MAC) && !defined(Q_OS_CYGWIN)
+ #include <execinfo.h>
+ #include <cxxabi.h>
+ #endif
+@@ -927,7 +927,7 @@ void getDashArray(int dashtype, double l
+ 	}
+ }
+ 
+-#if !defined(_WIN32) && !defined(Q_OS_MAC)
++#if !defined(_WIN32) && !defined(Q_OS_MAC) && !defined(Q_OS_CYGWIN)
+ /**
+  * Print a backtrace
+  * Please never commit code that uses it.
