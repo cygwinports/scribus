@@ -1,5 +1,5 @@
---- origsrc/scribus-1.3.6/scribus/CMakeLists.txt	2009-10-06 14:35:54.000000000 -0500
-+++ src/scribus-1.3.6/scribus/CMakeLists.txt	2010-05-26 15:54:55.123602200 -0500
+--- origsrc/scribus-1.3.7/scribus/CMakeLists.txt	2010-05-02 16:50:22.000000000 -0500
++++ src/scribus-1.3.7/scribus/CMakeLists.txt	2010-06-30 23:41:40.646045000 -0500
 @@ -707,11 +707,11 @@ ADD_EXECUTABLE(${EXE_NAME}
    ${GESTURE_FRAME_PREVIEW_SOURCES}
  )
@@ -24,7 +24,7 @@
    ${QT_LIBRARIES}
    ${CUPS_LIBRARIES}
    ${FREETYPE_LIBRARIES}
-@@ -765,13 +769,6 @@ IF(APPLE)
+@@ -770,13 +774,6 @@ IF(APPLE)
      "-framework CoreFoundation" )
  ENDIF(APPLE)
  
@@ -38,7 +38,7 @@
  IF(HAVE_PODOFO)
    TARGET_LINK_LIBRARIES(${EXE_NAME}
      ${LIBPODOFO_LIBRARY}
-@@ -780,7 +777,7 @@ ENDIF(HAVE_PODOFO)
+@@ -785,7 +782,7 @@ ENDIF(HAVE_PODOFO)
  
  # Now build plugins
  SET(PLUGIN_LIBRARIES)
@@ -47,7 +47,7 @@
    # IF your plugin needs more than this, please link them privately
    # in the CMakeLists.txt for your plugin.
    SET(PLUGIN_LIBRARIES
-@@ -790,7 +787,7 @@ IF(WIN32)
+@@ -795,7 +792,7 @@ IF(WIN32)
      ${ZLIB_LIBRARIES}
      ${EXE_NAME}
      )
@@ -56,7 +56,7 @@
  IF(APPLE)
    SET(PLUGIN_LIBRARIES "-undefined dynamic_lookup")
  ENDIF(APPLE)
-@@ -816,11 +813,13 @@ ELSE(APPLEBUNDLE)
+@@ -821,11 +818,13 @@ ELSE(APPLEBUNDLE)
      INSTALL(TARGETS ${EXE_NAME}
        RUNTIME DESTINATION .
        LIBRARY DESTINATION ${LIB_DIR_NAME}
@@ -70,8 +70,8 @@
        )
    ENDIF(WIN32)
  ENDIF(APPLEBUNDLE)
---- origsrc/scribus-1.3.6/scribus/plugins/aiimplugin/CMakeLists.txt	2007-10-03 06:50:42.000000000 -0500
-+++ src/scribus-1.3.6/scribus/plugins/aiimplugin/CMakeLists.txt	2010-05-26 11:26:25.951880400 -0500
+--- origsrc/scribus-1.3.7/scribus/plugins/import/ai/CMakeLists.txt	2007-10-03 06:50:42.000000000 -0500
++++ src/scribus-1.3.7/scribus/plugins/import/ai/CMakeLists.txt	2010-06-30 23:41:53.692791200 -0500
 @@ -33,7 +33,7 @@ IF(WIN32)
  	                ${TIFF_LIBRARIES}
  		        ${JPEG_LIBRARIES})
@@ -81,8 +81,8 @@
  ENDIF(WIN32)
  
  IF(HAVE_PODOFO)
---- origsrc/scribus-1.3.6/scribus/plugins/scriptplugin/CMakeLists.txt	2008-01-10 08:19:04.000000000 -0600
-+++ src/scribus-1.3.6/scribus/plugins/scriptplugin/CMakeLists.txt	2010-05-26 11:36:43.221186100 -0500
+--- origsrc/scribus-1.3.7/scribus/plugins/scriptplugin/CMakeLists.txt	2008-01-10 08:19:04.000000000 -0600
++++ src/scribus-1.3.7/scribus/plugins/scriptplugin/CMakeLists.txt	2010-06-30 23:41:53.696791400 -0500
 @@ -60,7 +60,7 @@ TARGET_LINK_LIBRARIES(${SCRIBUS_SCRIPTER
    ${PYTHON_LIBRARIES}
  )
@@ -92,8 +92,8 @@
  
  INSTALL(TARGETS ${SCRIBUS_SCRIPTER_PLUGIN}
    LIBRARY
---- origsrc/scribus-1.3.6/scribus/plugins/tools/2geomtools/meshdistortion/CMakeLists.txt	2008-05-26 17:07:15.000000000 -0500
-+++ src/scribus-1.3.6/scribus/plugins/tools/2geomtools/meshdistortion/CMakeLists.txt	2010-05-26 11:42:36.425388300 -0500
+--- origsrc/scribus-1.3.7/scribus/plugins/tools/2geomtools/meshdistortion/CMakeLists.txt	2008-05-26 17:07:15.000000000 -0500
++++ src/scribus-1.3.7/scribus/plugins/tools/2geomtools/meshdistortion/CMakeLists.txt	2010-06-30 23:41:53.700791700 -0500
 @@ -24,7 +24,7 @@ QT4_WRAP_CPP(MESHDISTORTION_PLUGIN_MOC_S
  
  ADD_LIBRARY(${SCRIBUS_MESHDISTORTION_PLUGIN} MODULE ${MESHDISTORTION_PLUGIN_SOURCES} ${MESHDISTORTION_PLUGIN_MOC_SOURCES} ${MESHDISTORTION_PLUGIN_UI_CPP} ${MESHDISTORTION_PLUGIN_UI_SOURCES})
@@ -103,8 +103,8 @@
  INSTALL(TARGETS ${SCRIBUS_MESHDISTORTION_PLUGIN}
    LIBRARY
    DESTINATION ${PLUGINDIR}
---- origsrc/scribus-1.3.6/scribus/plugins/tools/2geomtools/pathalongpath/CMakeLists.txt	2008-05-26 17:07:15.000000000 -0500
-+++ src/scribus-1.3.6/scribus/plugins/tools/2geomtools/pathalongpath/CMakeLists.txt	2010-05-26 11:44:30.716925400 -0500
+--- origsrc/scribus-1.3.7/scribus/plugins/tools/2geomtools/pathalongpath/CMakeLists.txt	2008-05-26 17:07:15.000000000 -0500
++++ src/scribus-1.3.7/scribus/plugins/tools/2geomtools/pathalongpath/CMakeLists.txt	2010-06-30 23:41:53.705792000 -0500
 @@ -24,7 +24,7 @@ QT4_WRAP_CPP(PATHALONGPATH_PLUGIN_MOC_SO
  
  ADD_LIBRARY(${SCRIBUS_PATHALONGPATH_PLUGIN} MODULE ${PATHALONGPATH_PLUGIN_SOURCES} ${PATHALONGPATH_PLUGIN_MOC_SOURCES} ${PATHALONGPATH_PLUGIN_UI_CPP} ${PATHALONGPATH_PLUGIN_UI_SOURCES})
