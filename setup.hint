@@ -1,5 +1,5 @@
 category: KDE Publishing
-requires: ghostscript libaspell15 libcairo2 libfontconfig1 libfreetype6 libgcc1 libjpeg7 liblcms1 libQtCore4 libQtGui4 libQtNetwork4 libQtXml4 libstdc++6 libtiff5 libxml2 python zlib0
+requires: ghostscript libaspell15 libcairo2 libfontconfig1 libfreetype6 libgcc1 libjpeg8 liblcms1 libpodofo0.8.4 libQtCore4 libQtGui4 libQtNetwork4 libQtXml4 libstdc++6 libtiff5 libxml2 python zlib0
 sdesc: "Professional desktop publishing program"
 ldesc: "Scribus brings award-winning professional DTP to Linux and *nix
 desktops with a combination of 'press-ready' output and new approaches

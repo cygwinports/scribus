@@ -7,7 +7,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 PATCH_URI="
 	1.3.7-docdir.patch
 	1.3.6-no-backtrace.patch
-	1.3.6-no-locale_t.patch
+	1.3.8-no-locale_t.patch
 	1.3.7-no-undefined.patch
 	1.3.6-plugin-loader.patch
 	1.3.6-printing.patch
@@ -17,8 +17,6 @@ PKG_NAMES="${PN} ${PN}-devel"
 PKG_HINTS="setup devel"
 scribus_CONTENTS="etc/ usr/bin/ usr/lib/scribus/ usr/share/"
 scribus_devel_CONTENTS="usr/include/ usr/lib/lib*"
-
-CYGCMAKE_ARGS="-DLIBPODOFO_FOUND=FALSE"
 
 src_install() {
 	cd ${B}
