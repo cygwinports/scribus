@@ -4,8 +4,8 @@
  #if defined(Q_WS_WIN)
  	cLocale = _create_locale(LC_ALL, "C");
  #else
--  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD)
-+  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD) and not defined(Q_OS_CYGWIN)
+-  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD) and not defined (Q_OS_FREEBSD)
++  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD) and not defined (Q_OS_FREEBSD) and not defined(Q_OS_CYGWIN)
  	cLocale = newlocale(LC_ALL_MASK, "C", NULL);
    #endif
  #endif
@@ -13,8 +13,8 @@
  #if defined(Q_WS_WIN)
  	_free_locale(cLocale);
  #else
--  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD)
-+  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD) and not defined(Q_OS_CYGWIN)
+-  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD) and not defined (Q_OS_FREEBSD)
++  #if not defined(Q_OS_SOLARIS) and not defined(Q_OS_OPENBSD) and not defined (Q_OS_FREEBSD) and not defined(Q_OS_CYGWIN)
  	freelocale(cLocale);
    #endif
  #endif
@@ -22,8 +22,8 @@
  #if defined(Q_WS_WIN)
  		return _strtod_l(str, endptr, that()->cLocale);
  #else
--  #if defined(Q_OS_SOLARIS) or defined (Q_OS_OPENBSD)
-+  #if defined(Q_OS_SOLARIS) or defined (Q_OS_OPENBSD) or defined(Q_OS_CYGWIN)
+-  #if defined(Q_OS_SOLARIS) or defined (Q_OS_OPENBSD) or defined (Q_OS_FREEBSD)
++  #if defined(Q_OS_SOLARIS) or defined (Q_OS_OPENBSD) or defined (Q_OS_FREEBSD) or defined(Q_OS_CYGWIN)
  		char *oldlocale=setlocale(LC_NUMERIC, NULL);
  		double result(0.0);
  		setlocale(LC_NUMERIC, "C");
@@ -33,16 +33,16 @@
  #include <xlocale.h>
  #endif
  
--#if defined(Q_OS_SOLARIS) || defined (Q_OS_OPENBSD)
-+#if defined(Q_OS_SOLARIS) || defined (Q_OS_OPENBSD) || defined(Q_OS_CYGWIN)
+-#if defined(Q_OS_SOLARIS) || defined (Q_OS_OPENBSD) || defined (Q_OS_FREEBSD)
++#if defined(Q_OS_SOLARIS) || defined (Q_OS_OPENBSD) || defined (Q_OS_FREEBSD) || defined(Q_OS_CYGWIN)
  #include <locale.h>
  #endif
  
  #if defined(Q_WS_WIN)
  #define XLocaleType _locale_t
  #else
--  #if defined (Q_OS_SOLARIS) || defined (Q_OS_OPENBSD)
-+  #if defined (Q_OS_SOLARIS) || defined (Q_OS_OPENBSD) || defined(Q_OS_CYGWIN)
+-  #if defined (Q_OS_SOLARIS) || defined (Q_OS_OPENBSD) || defined (Q_OS_FREEBSD)
++  #if defined (Q_OS_SOLARIS) || defined (Q_OS_OPENBSD) || defined (Q_OS_FREEBSD) || defined(Q_OS_CYGWIN)
    #define XLocaleType char*   //dummy?
    #else
    #define XLocaleType locale_t
