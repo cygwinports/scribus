@@ -1,0 +1,20 @@
+--- origsrc/scribus-1.4.4/scribus/util.cpp	2013-02-25 12:01:35.000000000 -0600
++++ src/scribus-1.4.4/scribus/util.cpp	2014-12-16 12:46:33.600344900 -0600
+@@ -37,7 +37,7 @@ for which a new license (GPL+exception)
+ 
+ #include <signal.h>
+ 
+-#if !defined(_WIN32) && !defined(Q_OS_MAC) && !defined(Q_OS_HAIKU) 
++#if !defined(_WIN32) && !defined(Q_OS_MAC) && !defined(Q_OS_HAIKU) && !defined(Q_OS_CYGWIN)
+ #include <execinfo.h>
+ #include <cxxabi.h>
+ #endif
+@@ -946,7 +946,7 @@ void getDashArray(int dashtype, double l
+  */
+ void printBacktrace ( int nFrames )
+ {
+-#if !defined(_WIN32) && !defined(Q_OS_MAC) && !defined(Q_OS_OPENBSD)  && !defined(Q_OS_FREEBSD) && !defined(Q_OS_HAIKU)
++#if !defined(_WIN32) && !defined(Q_OS_MAC) && !defined(Q_OS_OPENBSD)  && !defined(Q_OS_FREEBSD) && !defined(Q_OS_HAIKU) && !defined(Q_OS_CYGWIN)
+ 	void ** trace = new void*[nFrames + 1];
+ 	char **messages = ( char ** ) NULL;
+ 	int i, trace_size = 0;

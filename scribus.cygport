@@ -1,7 +1,7 @@
 inherit qt4-cmake python
 
 NAME="scribus"
-VERSION=1.4.2
+VERSION=1.4.4
 RELEASE=1
 CATEGORY="Publishing"
 SUMMARY="Professional desktop publishing program"
@@ -12,23 +12,29 @@ professional publishing features, such as CMYK color, separations, ICC color
 management and versatile PDF creation. Other features include PDF Import, EPS
 import/export, and support for Unicode text including right-to-left scripts."
 HOMEPAGE="http://www.scribus.net/"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.xz"
-
+#SRC_URI="mirror://sourceforge/scribus/scribus-${VERSION}.tar.xz"
+md5sum=1373e797409c1d6477a1f3cb9d061d0e
+SRC_URI="http://pkgs.fedoraproject.org/repo/pkgs/scribus/scribus-${VERSION}-free.tar.xz/${md5sum}/scribus-${VERSION}-free.tar.xz"
 PATCH_URI="
-	1.3.6-no-backtrace.patch
-	1.3.8-no-locale_t.patch
+	http://pkgs.fedoraproject.org/cgit/scribus.git/plain/scribus-1.4.2-nonfree.patch
+	1.4.4-cygwin-backtrace.patch
+	1.4.4-cygwin-locale.patch
 	1.3.7-no-undefined.patch
 	1.3.6-plugin-loader.patch
-	1.3.6-printing.patch
+	1.4.4-without-cups.patch
 "
 
-PKG_NAMES="${PN}" # ${PN}-devel"
+PKG_NAMES="${NAME}" # ${NAME}-devel"
 scribus_REQUIRES="ghostscript"
 scribus_CONTENTS="etc/ usr/bin/ usr/lib/scribus/ usr/share/"
 scribus_devel_CONTENTS="usr/include/ usr/lib/lib*"
-PKG_IGNORE=${scribus_devel_CONTENTS}
 
-CYGCMAKE_ARGS="-DWANT_VERSIONING=OFF"
+CYGCMAKE_ARGS="
+	-DWANT_DISTROBUILD=ON
+	-DWANT_HUNSPELL=ON
+	-DWANT_NOHEADERINSTALL=ON
+	-DWANT_VERSIONING=OFF
+"
 
 src_install() {
 	cd ${B}
