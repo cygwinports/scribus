@@ -1,7 +1,7 @@
 inherit qt4-cmake python
 
 NAME="scribus"
-VERSION=1.4.4
+VERSION=1.4.5
 RELEASE=1
 CATEGORY="Publishing"
 SUMMARY="Professional desktop publishing program"
@@ -13,7 +13,7 @@ management and versatile PDF creation. Other features include PDF Import, EPS
 import/export, and support for Unicode text including right-to-left scripts."
 HOMEPAGE="http://www.scribus.net/"
 #SRC_URI="mirror://sourceforge/scribus/scribus-${VERSION}.tar.xz"
-md5sum=1373e797409c1d6477a1f3cb9d061d0e
+md5sum=6c0b6d130b0328964c640ea7a6120480
 SRC_URI="http://pkgs.fedoraproject.org/repo/pkgs/scribus/scribus-${VERSION}-free.tar.xz/${md5sum}/scribus-${VERSION}-free.tar.xz"
 PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/scribus.git/plain/scribus-1.4.2-nonfree.patch
