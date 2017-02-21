@@ -1,0 +1,11 @@
+--- origsrc/scribus-1.4.6/cmake/modules/FindHUNSPELL.cmake	2012-04-10 15:15:53.000000000 -0500
++++ src/scribus-1.4.6/cmake/modules/FindHUNSPELL.cmake	2017-02-21 00:57:53.018134800 -0600
+@@ -9,7 +9,7 @@
+ #Based on examples at http://www.vtk.org/Wiki/CMake:How_To_Find_Libraries
+ 
+ FIND_PATH(HUNSPELL_INCLUDE_DIR hunspell/hunspell.hxx )
+-FIND_LIBRARY(HUNSPELL_LIBRARIES NAMES hunspell-1.3 hunspell-1.2 PATHS /opt/local/lib /usr/local/lib /usr/lib )
++FIND_LIBRARY(HUNSPELL_LIBRARIES NAMES hunspell-1.4 hunspell-1.3 hunspell-1.2 PATHS /opt/local/lib /usr/local/lib /usr/lib )
+ 
+ INCLUDE(FindPackageHandleStandardArgs)
+ # handle the QUIETLY and REQUIRED arguments and set HUNSPELL_FOUND to TRUE
