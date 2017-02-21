@@ -2,7 +2,7 @@ inherit qt4-cmake python
 
 NAME="scribus"
 VERSION=1.4.6
-RELEASE=1
+RELEASE=2
 CATEGORY="Publishing"
 SUMMARY="Professional desktop publishing program"
 DESCRIPTION="Scribus brings award-winning professional DTP to Linux and *nix
