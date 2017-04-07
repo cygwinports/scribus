@@ -22,7 +22,7 @@ PATCH_URI="
 	1.3.7-no-undefined.patch
 	1.3.6-plugin-loader.patch
 	1.4.4-without-cups.patch
-	1.4.6-hunspell14.patch
+	1.4.6-hunspell.patch
 "
 
 PKG_NAMES="${NAME}" # ${NAME}-devel"
