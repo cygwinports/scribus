@@ -2,7 +2,7 @@ inherit qt4-cmake python
 
 NAME="scribus"
 VERSION=1.4.6
-RELEASE=3
+RELEASE=4
 CATEGORY="Publishing"
 SUMMARY="Professional desktop publishing program"
 DESCRIPTION="Scribus brings award-winning professional DTP to Linux and *nix
@@ -18,11 +18,12 @@ SRC_URI="http://pkgs.fedoraproject.org/repo/pkgs/scribus/scribus-${VERSION}-free
 PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/scribus.git/plain/scribus-1.4.2-nonfree.patch
 	1.4.4-cygwin-backtrace.patch
-	1.4.4-cygwin-locale.patch
 	1.3.7-no-undefined.patch
 	1.3.6-plugin-loader.patch
 	1.4.4-without-cups.patch
 	1.4.6-hunspell.patch
+	1.4.6-fPIC.patch
+	1.4.6-ftm.patch
 "
 
 PKG_NAMES="${NAME}" # ${NAME}-devel"
